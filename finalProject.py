@@ -26,7 +26,7 @@ class reaction: #class that has properties for a single reaction
         self.P = 0
         self.AI = 0
 
-    def setConc(P,AI):
+    def setConc(self,P,AI):
         self.P = P
         self.AI = AI
   
