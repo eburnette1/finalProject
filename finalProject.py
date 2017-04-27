@@ -14,6 +14,27 @@ import matplotlib.patches as mpatches
 import numpy as np
 import pandas as pd
 
+class reaction: #class that has properties for a single reaction
+    def __init__(self, k, n, beta, eta, epsilon, alpha): #initializing function
+        self.k = k
+        self.n = n
+        self.beta = beta
+        self.eta = eta
+        self.epsilon = epsilon
+        self.alpha = alpha
+        
+        self.P = 0
+        self.AI = 0
+
+    def setConc(P,AI):
+        self.P = P
+        self.AI = AI
+  
+    def update(self, time): #function to update concentrations of chemicals for a time interval (time)
+        self.P = self.P + time*beta((self.AI**self.n)/(self.k**n+self.AI**n))
+        self.AI = self.AI + time*(self.epsilon*self.P-self.alpha*self.AI)
+
+
 def main():
     
     fileName = input("Input file name: ")
