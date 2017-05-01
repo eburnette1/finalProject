@@ -31,7 +31,7 @@ class reaction: #class that has properties for a single reaction
         self.AI = AI
   
     def update(self, time): #function to update concentrations of chemicals for a time interval (time)
-        self.P = self.P + time*beta((self.AI**self.n)/(self.k**n+self.AI**n))
+        self.P = self.P + time*self.beta((self.AI**self.n)/(self.k**self.n+self.AI**self.n))
         self.AI = self.AI + time*(self.epsilon*self.P-self.alpha*self.AI)
 
 
