@@ -49,13 +49,26 @@ class totalReaction: #class that has properties for a reaction with both P and A
 
 def main():
     
-    reactOne = pReaction(1000,1*10**(-9),3,10,3)
-    reactOneValues = []
-    while reactOne.P>1:
-        reactOneValues.append(reactOne.P)
-        reactOne.update(.1)
-    plt.plot(reactOneValues)
-    print(reactOneValues)
+#    reactOne = pReaction(1000,1*10**(-9),3,10,3)
+#    reactOneValues = []
+#    while reactOne.P>1:
+#        reactOneValues.append(reactOne.P)
+#        reactOne.update(.1)
+#    plt.plot(reactOneValues)
+#    print(reactOneValues)
+    
+    reactTwo = totalReaction(100,0,1*10**(-9),3,10,3,5*10**(-10),0.1)
+    reactTwoP = []
+    reactTwoAI = []
+    for i in range(100):
+        reactTwoP.append(reactTwo.P)
+        reactTwoAI.append(reactTwo.AI)
+        reactTwo.update(.1)
+    t = np.arange(0., 10, 0.1)
+    #plt.plot(t,reactTwoAI,t,reactTwoP)
+    plt.plot(t,reactTwoAI)
+    plt.show()
+    print(reactTwoAI)
 #    fileName = input("Input file name: ")
 #    infile = open(fileName, 'r')
 #    quorum_csv = csv.reader(infile)
