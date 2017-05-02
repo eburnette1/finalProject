@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 
 class pReaction:
-    def __init__(self, P, k, n, beta, eta):
+    def __init__(self, P, AI, k, n, beta, eta):
         self.k = k
         self.n = n
         self.beta = beta
@@ -25,9 +25,23 @@ class pReaction:
         self.AI = 0
         
     def update(self, time): #function to update concentrations of chemicals for a time interval (time)
-        self.P = self.P + time*(-self.eta*self.P)
+        self.P = self.P + time*(self.beta*((self.AI**self.n)/(self.k**self.n+self.AI**self.n))-self.eta*self.P)
         print(self.P)
     
+        
+class aReaction: #class that has properties for a reaction with both P and AI
+    def __init__(self, P, AI, epsilon, alpha): #initializing function
+        self.epsilon = epsilon
+        self.alpha = alpha
+        
+        self.P = 0
+        self.AI = AI
+
+    def update(self, time): #function to update concentrations of chemicals for a time interval (time)
+        self.P = self.P - 10 #is she supopsed to be -10 for each time interval?
+        self.AI = self.AI + time*(self.epsilon*self.P-self.alpha*self.AI)
+
+        
 class totalReaction: #class that has properties for a reaction with both P and AI
     def __init__(self, P, AI, k, n, beta, eta, epsilon, alpha): #initializing function
         self.k = k
@@ -41,8 +55,12 @@ class totalReaction: #class that has properties for a reaction with both P and A
         self.AI = AI
 
     def update(self, time): #function to update concentrations of chemicals for a time interval (time)
+        p1 = self.P    
         self.P = self.P + time*(self.beta*((self.AI**self.n)/(self.k**self.n+self.AI**self.n))-self.eta*self.P)
-        self.AI = self.AI + time*(self.epsilon*self.P-self.alpha*self.AI)
+        self.AI = self.AI + time*(self.epsilon*p1-self.alpha*self.AI)
+        print('P', self.P)
+        print('AI', self.AI)
+        
 
 
 
@@ -57,18 +75,30 @@ def main():
 #    plt.plot(reactOneValues)
 #    print(reactOneValues)
     
-    reactTwo = totalReaction(100,0,1*10**(-9),3,10,3,5*10**(-10),0.1)
+    reactTwo = totalReaction(100,0,1*10**(-9),3,120,3,5*10**(-10),0.1)
     reactTwoP = []
     reactTwoAI = []
+    #r1 =pReaction(1000, 0,1*10**(-9), 3,10,3)
+    #P=[]
+    #AI = []
+    
     for i in range(100):
+        #AI.append(r1.AI)
+        #P.append(r1.P)
+        #r1.update(.1)
         reactTwoP.append(reactTwo.P)
         reactTwoAI.append(reactTwo.AI)
         reactTwo.update(.1)
     t = np.arange(0., 10, 0.1)
+
     plt.plot(t,reactTwoP)
+    #plt.plot(P)
+    plt.title('P')
     plt.figure()
+    #plt.plot(r1AI)
     plt.plot(t,reactTwoAI)
-    print(reactTwoAI)
+    plt.title('AI')
+   # print(reactTwoAI)
 #    fileName = input("Input file name: ")
 #    infile = open(fileName, 'r')
 #    quorum_csv = csv.reader(infile)
