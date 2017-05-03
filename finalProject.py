@@ -29,16 +29,16 @@ class pReaction:
         print(self.P)
     
         
-class aReaction: #class that has properties for a reaction with both P and AI
+class aReaction: #class that has properties for a reaction with constant P
     def __init__(self, P, AI, epsilon, alpha): #initializing function
         self.epsilon = epsilon
         self.alpha = alpha
         
-        self.P = 0
+        self.P = P
         self.AI = AI
 
     def update(self, time): #function to update concentrations of chemicals for a time interval (time)
-        self.P = self.P - 10 #is she supopsed to be -10 for each time interval?
+        #self.P = self.P - 10 #is she supopsed to be -10 for each time interval?
         self.AI = self.AI + time*(self.epsilon*self.P-self.alpha*self.AI)
 
         
@@ -75,7 +75,7 @@ def main():
 #    plt.plot(reactOneValues)
 #    print(reactOneValues)
     
-    reactTwo = totalReaction(100,0,1*10**(-9),3,120,3,5*10**(-10),0.1)
+    reactTwo = totalReaction(100,0,10**(-9),3,10,3,5*10**(-10),0.1)
     reactTwoP = []
     reactTwoAI = []
     #r1 =pReaction(1000, 0,1*10**(-9), 3,10,3)
