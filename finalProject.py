@@ -116,6 +116,7 @@ def main():
         givenA.append(float(field[1]))
         givenP.append(float(field[2]))
 #
+    plt.figure()
     plt.plot(givenTime,givenP)
     plt.title('given P')
     plt.figure()
