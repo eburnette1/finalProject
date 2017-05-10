@@ -43,13 +43,14 @@ class aReaction: #class that has properties for a reaction with constant P
 
         
 class totalReaction: #class that has properties for a reaction with both P and AI
-    def __init__(self, P, AI, k, n, beta, eta, epsilon, alpha): #initializing function
+    def __init__(self, P, AI, k, n, beta, eta, epsilon): #initializing function
         self.k = k
         self.n = n
         self.beta = beta
         self.eta = eta
         self.epsilon = epsilon
-        self.alpha = alpha
+        self.time = 0
+        self.alpha = 0
         
         self.P = P
         self.AI = AI
@@ -58,9 +59,16 @@ class totalReaction: #class that has properties for a reaction with both P and A
         p1 = self.P    
         self.P = self.P + time*(self.beta*((self.AI**self.n)/(self.k**self.n+self.AI**self.n))-self.eta*self.P)
         self.AI = self.AI + time*(self.epsilon*p1-self.alpha*self.AI)
-        print('P', self.P)
-        print('AI', self.AI)
-        
+        self.time = self.time + time
+#        self.alpha = self.time*0.01 #for linearly dependent alpha
+        if self.time < 4:
+            self.alpha = 0.01
+        else:
+            self.alpha = 0.1
+        print(self.alpha)
+#        print('P', self.P)
+#        print('AI', self.AI)
+#        
 
 
 
@@ -75,7 +83,7 @@ def main():
 #    plt.plot(reactOneValues)
 #    print(reactOneValues)
     
-    reactTwo = totalReaction(100,0,10**(-9),3,10,3,5*10**(-10),0.1)
+    reactTwo = totalReaction(5,0,10**(-9),3,10,3,5*10**(-10))
     reactTwoP = []
     reactTwoAI = []
     #r1 =pReaction(1000, 0,1*10**(-9), 3,10,3)
