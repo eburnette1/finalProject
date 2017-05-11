@@ -121,11 +121,11 @@ def main():
 
     plt.plot(t,reactTwoP)
     #plt.plot(P)
-    plt.title('First P Graph')
+    plt.title('Combined P Graph')
     plt.figure()
 #    #plt.plot(r1AI)
     plt.plot(t,reactTwoAI)
-    plt.title('First AI Graph')
+    plt.title('Combined AI Graph')
     
     
     
