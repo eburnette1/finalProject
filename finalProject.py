@@ -37,6 +37,8 @@ class aReaction: #class that has properties for a reaction with constant P
 
     def update(self, time): #function to update concentrations of chemicals for a time interval (time)
         self.AI = self.AI + time*(self.epsilon*self.P-self.alpha*self.AI)
+        #self.P = self.P-10 #we had a bit of a disagreement about what part 3 was asking, whether it was a constant P or an independently decreasing concentration of P. Uncommented code is with constant P, uncomment this line for independent decrease.
+        
 
         
 class totalReaction: #class that has properties for a reaction with both P and AI
@@ -79,7 +81,8 @@ def rss(list1,list2):
 def main():
     print("Final Project 3, by Emily Burnette, Nick Garza, and Julia Costacurta")
 #below is for part 1 of the prompt; finding a P graph without any AI feedback
-    r1 =pReaction(1000, 0,1*10**(-9), 3,10,3)
+#should be decreasing since the first term in the equation goes to 0 when AI = 0, which is what's asked here.
+    r1 =pReaction(10, 0,1*10**(-9), 3,10,3)
     P=[]
     
     for i in range (101):
@@ -90,7 +93,7 @@ def main():
     plt.plot(t,P)
     plt.title('Part 1 - Just P Graph')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (P) ")
+    plt.ylabel("Concentration [P] (M) ")
     plt.figure()
 
     
@@ -106,15 +109,15 @@ def main():
     t = np.arange(0., 10.1, 0.1)
     
     plt.plot(t,reactAIP)
-    plt.title('Part 2 - Steady P, P Graph')
+    plt.title('Part 2 - Constant P, P Graph')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (P) ")
+    plt.ylabel("Concentration [P] (M) ")
     plt.figure()
     
     plt.plot(t,reactAIAI)
-    plt.title('Part 2 - Steady P, AI Graph')
+    plt.title('Part 2 - Constant P, AI Graph')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (A) ")
+    plt.ylabel("Concentration [A]] (M) ")
     plt.figure()
     
 
@@ -144,28 +147,28 @@ def main():
     plt.plot(t,reactLowP)
     plt.title('Part 3 - Low P, P Graph')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (P) ")
+    plt.ylabel("Concentration (P) (M) ")
     plt.figure()
     
     #high P
     plt.plot(t,reactHighP)
     plt.title('Part 3 - High P, P Graph')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (P) ")
+    plt.ylabel("Concentration [P] (M) ")
     plt.figure()
     
     #low P AI graph
     plt.plot(t,reactLowAI)
     plt.title('Part 3 - Low P, AI Graph')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (A) ")
+    plt.ylabel("Concentration [A] (M)")
     plt.figure()
     
     #high P AI Graph
     plt.plot(t,reactHighAI)
     plt.title('Part 3 - High P, AI Graph')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (A) ")
+    plt.ylabel("Concentration [A] (M) ")
     
 #part 5 of the prompt, finding best fits of epsilon and beta to match to the given graphs
     fileName = 'quorum.csv'
@@ -255,7 +258,7 @@ def main():
     plt.plot(t, reactTotalP, 'b--', t, givenP, 'r')
     plt.title('Part 5 - Given and Optimized P')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (P) ")
+    plt.ylabel("Concentration [P] (M) ")
     blue_patch = mpatches.Patch(color='blue', label='Optimized P')
     red_patch = mpatches.Patch(color='red', label='Given P')
     plt.legend(handles=[blue_patch, red_patch])
@@ -266,7 +269,7 @@ def main():
     plt.plot(t, reactTotalAI, 'g--', t, givenA, 'r')
     plt.title('Part 5 - Given and Optimized A')
     plt.xlabel("Time (seconds)")
-    plt.ylabel("Concentration (A) ")
+    plt.ylabel("Concentration [A] (M) ")
     green_patch = mpatches.Patch(color='green', label='Optimized A')
     red_patch = mpatches.Patch(color='red', label='Given A')
     plt.legend(handles=[green_patch, red_patch])
