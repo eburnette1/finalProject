@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Apr 25 09:47:47 2017
-@author: Emily, Julia, Nick, the squad goals
+@author: Emily, Julia, Nick
 Final Project 3: Quorum Sensing
 """
 import csv 
@@ -24,6 +24,7 @@ class pReaction:
         
     def update(self, time): #function to update concentrations of chemicals for a time interval (time)
         self.P = self.P + time*(self.beta*((self.AI**self.n)/(self.k**self.n+self.AI**self.n))-self.eta*self.P)
+        
         print(self.P)
     
         
@@ -56,9 +57,6 @@ class totalReaction: #class that has properties for a reaction with both P and A
         p1 = self.P    
         self.P = self.P + time*(self.beta*((self.AI**self.n)/(self.k**self.n+self.AI**self.n))-self.eta*self.P)
         self.AI = self.AI + time*(self.epsilon*p1-self.alpha*self.AI)
-
-        #part 2, independent steady concentration of P
-        #self.P = selp.P -time(10)
         
         #time-varying alpha, part 4
         self.time = self.time + time
@@ -90,8 +88,8 @@ def main():
        #r1.update(.1)
     #t = np.arange(0., 10.1, 0.1)
 
-#below is for part 2 of the prompt, finding P and AI values with an epsilon of 5e-10 and alpha of .1. Also possibly part 3, if the prompt was mistyped and it actually meant start with a low concentration of Ai and a high concentration of P   
-    reactTwo = totalReaction(5,0,10**(-9),3,10,3,5*10**(-10))
+#below is for part 2 of the prompt, finding P and AI values with an epsilon of 5e-10 and alpha of .1. The independent concentration of P is commented out above so it doesn't mess with other stuff
+    reactTwo = totalReaction(5,0,10**(-9),3,10,3,5*10**(-10)) #this also doubles as low P
     reactTwoP = []
     reactTwoAI = []
 
@@ -101,18 +99,45 @@ def main():
         reactTwo.update(.1)
     t = np.arange(0., 10.1, 0.1)
 
-
-# Graphing part 3    
-   # plt.plot(t,reactTwoP)
-   # plt.title('Combined P Graph')
-   # plt.xlabel("Time (seconds)")
-   # plt.ylabel("Concentration (P) ")
-   # plt.figure()
-   # plt.plot(t,reactTwoAI)
-   # plt.title('Combined AI Graph')
-   # plt.xlabel("Time (seconds)")
-   # plt.ylabel("Concentration (A) ")
     
+
+# Graphing part 3
+    reactHigh = totalReaction(100,0,10**(-9),3,10,3,5*10**(-10)) 
+    reactHighP = []
+    reactHighAI = []
+
+    for i in range(101):
+        reactHighP.append(reactHigh.P)
+        reactHighAI.append(reactHigh.AI)
+        reactHigh.update(.1)
+    t = np.arange(0., 10.1, 0.1)
+    
+    #low P
+    plt.plot(t,reactTwoP)
+    plt.title('Low P Graph')
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Concentration (P) ")
+    plt.figure()
+    
+    #high P
+    plt.plot(t,reactHighP)
+    plt.title('High P Graph')
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Concentration (P) ")
+    plt.figure()
+    
+    #low P AI graph
+    plt.plot(t,reactTwoAI)
+    plt.title('Low AI Graph')
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Concentration (A) ")
+    plt.figure()
+    
+    #high P AI Graph
+    plt.plot(t,reactHighAI)
+    plt.title('High AI Graph')
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Concentration (A) ")
     
 #part 5 of the prompt, finding best fits of epsilon and beta to match to the given graphs
     fileName = 'quorum.csv'
