@@ -101,6 +101,16 @@ def main():
         reactTwo.update(.1)
     t = np.arange(0., 10.1, 0.1)
 
+<<<<<<< HEAD
+=======
+    plt.plot(t,reactTwoP)
+    #plt.plot(P)
+    plt.title('Combined P Graph')
+    plt.figure()
+#    #plt.plot(r1AI)
+    plt.plot(t,reactTwoAI)
+    plt.title('Combined AI Graph')
+>>>>>>> 29dfbb5867c8e800c3d57e4ae82030a18ac39918
     
 # Graphing part 3    
    # plt.plot(t,reactTwoP)
