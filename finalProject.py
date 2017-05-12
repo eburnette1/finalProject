@@ -36,7 +36,6 @@ class aReaction: #class that has properties for a reaction with constant P
         self.AI = AI
 
     def update(self, time): #function to update concentrations of chemicals for a time interval (time)
-        #self.P = self.P - 10 #is she supposed to be -10 for each time interval?
         self.AI = self.AI + time*(self.epsilon*self.P-self.alpha*self.AI)
 
         
@@ -58,93 +57,72 @@ class totalReaction: #class that has properties for a reaction with both P and A
         self.P = self.P + time*(self.beta*((self.AI**self.n)/(self.k**self.n+self.AI**self.n))-self.eta*self.P)
         self.AI = self.AI + time*(self.epsilon*p1-self.alpha*self.AI)
 
+        #part 2, independent steady concentration of P
+        #self.P = selp.P -time(10)
+        
+        #time-varying alpha, part 4
         self.time = self.time + time
-#        self.alpha = self.time*0.01 #for linearly dependent alpha
         if self.time < 4:
             self.alpha = 0.01
         else:
             self.alpha = 0.1
 
 
-#        print(self.alpha)  u can check time varying alpha here
 
-#        print('P', self.P)
-#        print('AI', self.AI)
 #        
-def rss(list1,list2): #function to get the RSS between 2 lists
+def rss(list1,list2): 
     rssError = 0
     for i in range(len(list1)):
         rssError += (list1[i] - list2[i])**2
     return rssError
 
- #       print('P', self.P)
- #       print('AI', self.AI)
-        
- 
-        
-        #again sorry for commenting out
-#def rss(raw,sim):    # residual sum of squares 
-#    sum = 0
-#    for i in range(len(sim)):
-#        sum+= (raw[i]-sim[i])**2
-#        
-#    return sum
-
 
 
 
 def main():
+    print("Final Project 3, by Emily Burnette, Nick Garza, and Julia Costacurta")
+#below is for part 1 of the prompt; finding a P graph without any AI feedback
+    #r1 =pReaction(1000, 0,1*10**(-9), 3,10,3)
+    #P=[]
     
-#    reactOne = pReaction(1000,1*10**(-9),3,10,3)
-#    reactOneValues = []
-#    while reactOne.P>1:
-#        reactOneValues.append(reactOne.P)
-#        reactOne.update(.1)
-#    plt.plot(reactOneValues)
-#    print(reactOneValues)
-    
+    #for i in range (101):
+       #P.append(r1.P)
+       #r1.update(.1)
+    #t = np.arange(0., 10.1, 0.1)
+
+#below is for part 2 of the prompt, finding P and AI values with an epsilon of 5e-10 and alpha of .1. Also possibly part 3, if the prompt was mistyped and it actually meant start with a low concentration of Ai and a high concentration of P   
     reactTwo = totalReaction(5,0,10**(-9),3,10,3,5*10**(-10))
     reactTwoP = []
     reactTwoAI = []
-    #r1 =pReaction(1000, 0,1*10**(-9), 3,10,3)
-    #P=[]
-    #AI = []
-    
+
     for i in range(101):
-        #AI.append(r1.AI)
-        #P.append(r1.P)
-        #r1.update(.1)
         reactTwoP.append(reactTwo.P)
         reactTwoAI.append(reactTwo.AI)
         reactTwo.update(.1)
     t = np.arange(0., 10.1, 0.1)
 
-    plt.plot(t,reactTwoP)
-    #plt.plot(P)
-    plt.title('First P Graph')
-    plt.figure()
-#    #plt.plot(r1AI)
-    plt.plot(t,reactTwoAI)
-    plt.title('First AI Graph')
+    
+# Graphing part 3    
+   # plt.plot(t,reactTwoP)
+   # plt.title('First P Graph')
+   # plt.xlabel("Time (seconds)")
+   # plt.ylabel("Concentration (P) ")
+   # plt.figure()
+   # plt.plot(t,reactTwoAI)
+   # plt.title('First AI Graph')
+   # plt.xlabel("Time (seconds)")
+   # plt.ylabel("Concentration (A) ")
     
     
-    
-    
-    
-   # print(reactTwoAI)
-
-    #fileName = input("Input file name: ") #commented out so it's easier to run
-    
+#part 5 of the prompt, finding best fits of epsilon and beta to match to the given graphs
     fileName = 'quorum.csv'
     infile = open(fileName, 'r')
 
-   # fileName = input("Input file name: ")
     infile = open('quorum.csv', 'r')
 
     quorum_csv = csv.reader(infile)
     next(quorum_csv) # skips first line to get rid of the headings
-    #print(quorum_csv)
-#    
+    
     #values taken from the CSV file
     givenTime = [];
     givenA = [];
@@ -157,30 +135,31 @@ def main():
         givenA.append(float(field[1]))
         givenP.append(float(field[2]))
 
-#
-    plt.figure()
-    plt.plot(givenTime,givenP)
-    plt.title('given P')
-    plt.figure()
-    plt.plot(givenTime,givenA)
-    plt.title('given A')
-    plt.figure()
+
+#plotting given AI and P values        
+    #plt.figure()
+    #plt.plot(givenTime,givenP)
+    #plt.title('given P')
+    #plt.xlabel("Time (seconds)")
+    #plt.ylabel("Concentration (P) ")
+    #plt.figure()
+    #plt.plot(givenTime,givenA)
+    #plt.title('given A')
+    #plt.xlabel("Time (seconds)")
+    #plt.ylabel("Concentration (A) ")
     
     data = {'time': givenTime, 'A' : givenA, 'P' : givenP}
     graph = pd.DataFrame(data, columns=['time', 'A', 'P'])
     outfile = open("quorumOutfile.csv", "w")     
     graph.to_csv(outfile)
-#    
+    
 
     infile.close();
 
 
-    
-
-
 
     
-#    #function to optimize k2 by using the k1 found earlier and searching for what k2 would give the least RSS for chemical B
+# Finding best Epsilon value
     best2 = rss(reactTwoAI,givenA)
     for i in np.arange(1*10**(-11),1*10**(-9),1*10**(-12)):
         reacti = totalReaction(5,0,10**(-9),3,10,3,i)
@@ -193,9 +172,8 @@ def main():
             bestEpsilon = i
     print("The best epsilon is", bestEpsilon)
     
-
+#Finding best Beta value
     best = rss(reactTwoP,givenP)
-
     for i in np.arange(0,20,0.1):
         reacti = totalReaction(5,0,10**(-9),3,i,3,bestEpsilon)
         P = []
@@ -208,89 +186,36 @@ def main():
     print("The best beta is", bestBeta)
     
     
-    
+ #simulating using best Beta and Epsilon values
     reactTotal = totalReaction(5,0,10**(-9),3,bestBeta,3,bestEpsilon)
     reactTotalP = []
     reactTotalAI = []
     for i in range(101):
-        #AI.append(r1.AI)
-        #P.append(r1.P)
-        #r1.update(.1)
         reactTotalP.append(reactTotal.P)
         reactTotalAI.append(reactTotal.AI)
         reactTotal.update(.1)
+    
         
-    t = np.arange(0., 10.1, 0.1)
-    plt.plot(t,reactTotalP)
-    #plt.plot(P)
-    plt.title('New P')
+
+#Graph comparing given and optimized P values
     plt.figure()
-    #plt.plot(r1AI)
-    plt.plot(t,reactTotalAI)
-    plt.title('New AI')
+    plt.plot(t, reactTotalP, 'b--', t, givenP, 'r')
+    plt.title('Given and Optimized P')
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Concentration (P) ")
+    blue_patch = mpatches.Patch(color='blue', label='Optimized P')
+    red_patch = mpatches.Patch(color='red', label='Given P')
+    plt.legend(handles=[blue_patch, red_patch])
+    
+    
+#Graph comparing given and optimized AI values    
+    plt.figure()
+    plt.plot(t, reactTotalAI, 'g--', t, givenA, 'r')
+    plt.title('Given and Optimized A')
+    plt.xlabel("Time (seconds)")
+    plt.ylabel("Concentration (A) ")
+    green_patch = mpatches.Patch(color='green', label='Optimized A')
+    red_patch = mpatches.Patch(color='red', label='Given A')
+    plt.legend(handles=[green_patch, red_patch])
 main();
 
-#hey sorry to comment this out i just want to try to get the pushing stuff to work
-
-#=======
-#    #### data fit attempt ##### (not sure if do just like midterm?) look at me look at me look at me
-#    bRange = np.arange(1,100,10) #chose beta range <100
-#    eRange = np.arange(1E-10,1E-8,1E-11) #just chose small epsilon range
-#    rssB = []
-#    rssE = []
-#    
-#    for b in bRange:    # the hunt for the perfect beta
-#        reactThree = totalReaction(5,0,10**(-9),3,b,3,5*10**(-10))
-#        reactThreeP =[]
-#        reactThreeAI = []
-#        for i in range(100):
-#            reactThreeP.append(reactThree.P)
-#            reactThreeAI.append(reactThree.AI)
-#            reactThree.update(.1)
-#            
-#        rssB.append(rss(givenP,reactThreeP))
-#        
-#        
-#    bIndex = rssB.index(min(rssB))
-#    bFav = bRange[bIndex]
-#    print("B Fave = ",bFav)
-#    
-#    
-#     
-#    for e in eRange:    # the hunt for the perfect epsilon
-#        reactFour = totalReaction(5,0,10**(-9),3,bFav,3,e)
-#        reactFourP =[]
-#        reactFourAI = []
-#        for i in range(100):
-#            reactFourP.append(reactFour.P)
-#            reactFourAI.append(reactFour.AI)
-#            reactFour.update(.1)
-#            
-#        rssE.append(rss(givenP,reactFourP))
-#        
-#        
-#    eIndex = rssE.index(min(rssE))
-#    eFav = eRange[eIndex]
-#    print("E Fave = ",eFav)
-#    
-#    
-#    reactFix = totalReaction(5,0,10**(-9),3,bFav,3,e)
-#    reactFixP = []
-#    reactFixAI = []
-#
-#    for i in range(100):
-#        reactFixP.append(reactFix.P)
-#        reactFixAI.append(reactFix.AI)
-#        reactFix.update(.1)
-#
-#    plt.plot(t,reactFixP)
-#    #plt.plot(P)
-#    plt.title('Corrected Concentration of P')
-#    plt.figure()
-#    #plt.plot(r1AI)
-#    plt.plot(t,reactFixAI)
-#    plt.title('Corrected Concentration of AI')
-#    plt.figure()
-
-
-#    infile.close();
